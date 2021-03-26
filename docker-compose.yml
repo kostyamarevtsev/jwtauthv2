@@ -1,0 +1,47 @@
+version: "3.2"
+
+networks:
+  back:
+    driver: bridge
+
+services:
+  jwtauthv2:
+    container_name: jwtauthv2_container_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+          condition: service_healthy
+    environment:
+      DSN_DB: "postgresql://postgres:example@db:5432/jwtauthv2?sslmode=disable"  
+      SECRET: "SECRET"
+      PORT: ":8000"
+    networks:
+      - back
+
+  db:
+    container_name: jwtauthv2_container_postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: jwtauthv2
+    ports:
+      - 5432:5432
+    networks:
+      - back  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    container_name: jwtauthv2_container_adminer
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - back  
