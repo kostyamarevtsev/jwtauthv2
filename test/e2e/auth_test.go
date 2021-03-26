@@ -1,4 +1,4 @@
-package jwtauthv2_test
+package jwtauthv2_e2e
 
 import (
 	"bytes"
