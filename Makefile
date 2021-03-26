@@ -19,5 +19,5 @@ migrateup:
 migratedown: 
 	migrate -path ./migration -database "postgresql://postgres:example@localhost:5432/jwtauthv2?sslmode=disable" -verbose down
 
-test.api:
+test.e2e:
 	DSN_DB=$$DSN_DB SECRET=$$SECRET PORT=$$PORT go test -v ./test/
